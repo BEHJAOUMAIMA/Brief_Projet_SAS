@@ -1,10 +1,8 @@
 #include <stdio.h>
-
 #include <stdlib.h>
-
 #include <stdbool.h>
-
 #include <string.h>
+#include <time.h>
 
 /******************structures************************************/
 struct Produit
@@ -89,7 +87,7 @@ void ListerProduitsNom()
 
     for (i = 0; i < produits; i++)
     {
-        printf("Nom = %s \t\t Code = %s \t\t Quantite = %d\t\t Prix = %.2f \t\t Prix TTC= %.2f\n", tab[i].nom, tab[i].code, tab[i].quantite, tab[i].prix, (tab[i].prix) * 1.05);
+        printf("Nom = %s \t\t Code = %s \t\t Quantite = %d\t\t Prix = %.2f \t\t Prix TTC= %.2f\n", tab[i].nom, tab[i].code, tab[i].quantite, tab[i].prix, (tab[i].prix) * 1.15);
     }
 }
 void ListerProduitsPrix()
@@ -122,7 +120,7 @@ void ListerProduitsPrix()
 
     for (i = 0; i < produits; i++)
     {
-        printf("Nom = %s \t\t Code = %s \t\t Quantite = %d\t\t Prix = %.2f \t\t Prix TTC= %.2f\n", tab[i].nom, tab[i].code, tab[i].quantite, tab[i].prix, (tab[i].prix) * 1.05);
+        printf("Nom = %s \t\t Code = %s \t\t Quantite = %d\t\t Prix = %.2f \t\t Prix TTC= %.2f\n", tab[i].nom, tab[i].code, tab[i].quantite, tab[i].prix, (tab[i].prix) * 1.15);
     }
 }
 
