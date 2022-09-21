@@ -323,7 +323,7 @@ void Statistiques(){
 int main()
 {
 
-    int choix1, choix2, choix3, nombreAchats;
+    int choix1, choix2, choix3;
     do
     {
         printf("\n\n\t\tBienvenue au Pharmacie YouCode !\t\t\n\n");
