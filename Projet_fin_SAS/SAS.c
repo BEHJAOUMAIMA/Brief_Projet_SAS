@@ -12,10 +12,23 @@ struct Produit
     int quantite;
     double prix;
 };
-/******************global variables*****************************/
+struct Achat
+{
+    char code[20];
+    char nom[15];
+    int quantite;
+    double prix, prixTTC;
+    int jour, mois, annee;
+};
 
+/******************global variables*****************************/
+struct Achat Achat[100];
 struct Produit tab[100];
 int produits = 0;
+int produitsachetes = 0;
+int Qnt=0;
+
+
 /*******************Fonctions***********************************/
 void cleanCls()
 {
@@ -33,6 +46,7 @@ int ajouterUnProduit()
     printf("Veuillez entrer le prix convenable : ");
     scanf("%lf", &tab[produits].prix);
     printf("\nC est bon , vous avez ajouter le produit correctement!\n");
+    produits++;
     return 1;
 }
 int ajouterPlusieursProduits()
@@ -67,20 +81,10 @@ void ListerProduitsNom()
         {
             if (tab[i].nom[0] > tab[j].nom[0])
             {
-                strcpy(temporaire.nom, tab[i].nom);
-                strcpy(temporaire.code, tab[i].code);
-                temporaire.quantite = tab[i].quantite;
-                temporaire.prix = tab[i].prix;
+                temporaire= tab[i];
+                tab[i] = tab[j];
+                tab[j] = temporaire;
 
-                strcpy(tab[i].nom, tab[j].nom);
-                strcpy(tab[i].code, tab[j].code);
-                tab[i].quantite = tab[j].quantite;
-                tab[i].prix = tab[j].prix;
-
-                strcpy(tab[j].nom, temporaire.nom);
-                strcpy(tab[j].code, temporaire.code);
-                tab[j].quantite = temporaire.quantite;
-                tab[j].prix = temporaire.prix;
             }
         }
     }
@@ -100,20 +104,9 @@ void ListerProduitsPrix()
         {
             if (tab[i].prix < tab[j].prix)
             {
-                strcpy(temporaire.nom, tab[i].nom);
-                strcpy(temporaire.code, tab[i].code);
-                temporaire.quantite = tab[i].quantite;
-                temporaire.prix = tab[i].prix;
-
-                strcpy(tab[i].nom, tab[j].nom);
-                strcpy(tab[i].code, tab[j].code);
-                tab[i].quantite = tab[j].quantite;
-                tab[i].prix = tab[j].prix;
-
-                strcpy(tab[j].nom, temporaire.nom);
-                strcpy(tab[j].code, temporaire.code);
-                tab[j].quantite = temporaire.quantite;
-                tab[j].prix = temporaire.prix;
+                temporaire= tab[i];
+                tab[i] = tab[j];
+                tab[j] = temporaire;
             }
         }
     }
@@ -126,9 +119,29 @@ void ListerProduitsPrix()
 
 void AchatProduits()
 {
-    int i, quantiteAchetee;
+    int heure, minute, seconde , jour, mois, annee;
+    time_t maintenant;
+
+    // renvoie de l'heure actuelle :
+    time(&maintenant);
+    // Convertir au Format de l'heure actuelle :
+
+
+    struct tm *local = localtime(&maintenant);
+    heure = local->tm_hour;
+    minute = local->tm_min;
+    seconde = local->tm_sec;
+    jour = local->tm_mday;
+    mois = local->tm_mon + 1;
+    annee = local->tm_year + 1900;
+
+
+
+
+    int i, quantiteAchetee, indice;
     char codeProduit[20];
-    ListerProduitsNom();
+
+
     printf("Veuillez taper le code du produit que vous souhaitez acheter :\n");
     scanf("%s", codeProduit);
 
@@ -146,14 +159,28 @@ void AchatProduits()
         {
             if (strcmp(tab[i].code, codeProduit) == 0)
             {
-                if (tab[i].quantite > quantiteAchetee)
+                if (tab[i].quantite >= quantiteAchetee)
                 {
                     tab[i].quantite -= quantiteAchetee;
-                    printf("Code %s\t\t Nom %s\t Quantite = %d\t Prix = %.2fDHS\t Prix TTC = %.2fDHS \n\n", tab[i].code, tab[i].nom, tab[i].quantite, tab[i].prix, (tab[i].prix) * 1.15);
+                    indice = i;
+        strcpy(Achat[produitsachetes].code, tab[i].code);
+        strcpy(Achat[produitsachetes].nom, tab[i].nom);
+        Achat[produitsachetes].prix = tab[i].prix;
+        Achat[produitsachetes].prixTTC = (tab[i].prix)*1.15;
+        Achat[produitsachetes].quantite = quantiteAchetee;
+        Achat[produitsachetes].annee = local->tm_year + 1900;
+        Achat[produitsachetes].mois = local -> tm_mon + 1;
+        Achat[produitsachetes].jour = local -> tm_mday;
+        produitsachetes++;
+        Qnt += quantiteAchetee;
+               printf("Code %s\t\t Nom %s\t Quantite = %d\t Prix = %.2fDHS\t Prix TTC = %.2fDHS \n\n", tab[indice].code, tab[indice].nom, tab[indice].quantite, tab[indice].prix, (tab[indice].prix) * 1.15);
+               printf("Aujourd\'hui est : %s", ctime(&maintenant));
+               printf("La date : %02d/%02d/%d\n", jour, mois, annee);
+               printf("L\'heure : %02d:%02d:%02d\n", heure, minute, seconde);
                 }
                 else
                 {
-                    printf("\nStock epuise !!! Veuillez revenir prochainement. Merci pour votre Comprehension\n\n");
+                printf("\nStock epuise !!! Veuillez revenir prochainement. Merci pour votre Comprehension\n\n");
                 }
             }
         }
@@ -248,17 +275,58 @@ void SupprimerProduit(){
     }
    printf("\n\n\n Voici la liste mis a jour apres la supression du Produit\n\n\n");
    for (i=0; i<produits; i++){
-   printf("Code %s\t\t Nom %s\t Quantite = %d\t Prix = %.2fDHS\t Prix TTC = %.2fDHS \n\n", tab[i].code, tab[i].nom, tab[i].quantite, tab[i].prix, (tab[i].prix) * 1.15);
 
+printf("Code %s\t\t Nom %s\t Quantite = %d\t Prix = %.2fDHS\t Prix TTC = %.2fDHS \n\n", tab[i].code, tab[i].nom, tab[i].quantite, tab[i].prix, (tab[i].prix) * 1.15);
    }
+}
+
+void Statistiques(){
+
+    time_t maintenant;
+    // renvoie de l'heure actuelle :
+    time(&maintenant);
+    // Convertir au Format de l'heure actuelle :
+    struct tm *local = localtime(&maintenant);
+
+    double prixTotal = 0 , moyenne = 0,  max =0 , min = 1000;
+
+			for(int i=0;i<produitsachetes;i++)
+			{
+				if(Achat[i].jour == local->tm_mday)
+				{
+					prixTotal += Achat[i].prix ;
+
+				}
+			}
+
+			moyenne = prixTotal/Qnt ;
+
+			for(int i=0;i<produitsachetes;i++)
+			{
+				if(Achat[i].prix > max)
+				max = Achat[i].prix;
+			}
+
+			for(int i=0;i<produitsachetes;i++)
+			{
+				if(Achat[i].prix < min )
+				min = Achat[i].prix;
+			}
+
+
+			printf(" le total des prix des produits vendus en journee courante est = %.2f\n",prixTotal);
+			printf("Afficher la moyenne des prix des produits vendus en journee courante est = %.2f\n",moyenne);
+			printf("Afficher le Max des prix des produits vendus en journee courante = %.2f\n",max);
+			printf("Afficher le Min des prix des produits vendus en journee courante est = %.2f\n",min);
 }
 
 int main()
 {
-    int choix1, choix2, choix3;
+
+    int choix1, choix2, choix3, nombreAchats, i;
     do
     {
-        printf("\t\tBienvenue au Pharmacie YouCode !\t\t\n\n");
+        printf("\n\n\t\tBienvenue au Pharmacie YouCode !\t\t\n\n");
         printf("\t*********************************************************************************************\n\n");
         printf("\t\t1 : Ajouter un produit pharmaceutique :\n");
         printf("\t\t2 : Ajouter plusieurs produits pharmaceutiques :\n");
@@ -312,12 +380,19 @@ int main()
                 break;
             }
             }
+            break;
         }
 
         case 4:
         {
             cleanCls();
+            ListerProduitsNom();
+            //printf("Combien de produits voulez-vous acheter ?");
+            //scanf("%d", &nombreAchats);
+
+            //for(i=0; i<nombreAchats; i++){
             AchatProduits();
+            //}
             break;
         }
         case 5:
@@ -358,11 +433,19 @@ int main()
             SupprimerProduit();
             break;
         }
-        case 9:
+        case 9:{
+            cleanCls();
+            Statistiques();
+            //TotalProduitsVendus();
+            //MoyenneProduitsVendus();
+            //MaxPrixProduitsVendus();
+            //MinPrixProduitsVendus();
             break;
+        }
         default:
             break;
         }
-    } while (1);
+    } while (choix1!=0);
     return 0;
 }
+
