@@ -315,15 +315,15 @@ void Statistiques(){
 
 
 			printf(" le total des prix des produits vendus en journee courante est = %.2f\n",prixTotal);
-			printf("Afficher la moyenne des prix des produits vendus en journee courante est = %.2f\n",moyenne);
-			printf("Afficher le Max des prix des produits vendus en journee courante = %.2f\n",max);
-			printf("Afficher le Min des prix des produits vendus en journee courante est = %.2f\n",min);
+			printf("la moyenne des prix des produits vendus en journee courante est = %.2f\n",moyenne);
+			printf("le Max des prix des produits vendus en journee courante = %.2f\n",max);
+			printf("le Min des prix des produits vendus en journee courante est = %.2f\n",min);
 }
 
 int main()
 {
 
-    int choix1, choix2, choix3, nombreAchats, i;
+    int choix1, choix2, choix3, nombreAchats;
     do
     {
         printf("\n\n\t\tBienvenue au Pharmacie YouCode !\t\t\n\n");
@@ -387,12 +387,8 @@ int main()
         {
             cleanCls();
             ListerProduitsNom();
-            //printf("Combien de produits voulez-vous acheter ?");
-            //scanf("%d", &nombreAchats);
-
-            //for(i=0; i<nombreAchats; i++){
             AchatProduits();
-            //}
+
             break;
         }
         case 5:
@@ -436,14 +432,9 @@ int main()
         case 9:{
             cleanCls();
             Statistiques();
-            //TotalProduitsVendus();
-            //MoyenneProduitsVendus();
-            //MaxPrixProduitsVendus();
-            //MinPrixProduitsVendus();
             break;
         }
-        default:
-            break;
+
         }
     } while (choix1!=0);
     return 0;
